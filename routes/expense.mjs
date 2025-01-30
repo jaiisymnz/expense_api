@@ -2,7 +2,42 @@ import { Router } from "express";
 import connectionPool from "../utils/db.mjs";
 
 const expenseRouter = Router();
-
+/**
+ * @swagger
+ * /expenses:
+ *   post:
+ *     summary: Create a new expense
+ *     description: Create a new expense record
+ *     tags:
+ *       - Expense Management 
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               user_id:
+ *                 type: integer
+ *               category_id:
+ *                 type: integer
+ *               title:
+ *                 type: string
+ *               amount:
+ *                 type: number
+ *               date_of_expense:
+ *                 type: string
+ *                 format: date
+ *               note:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Expense created successfully
+ *       400:
+ *         description: Missing required fields
+ *       500:
+ *         description: Internal Server Error
+ */
 expenseRouter.post("/", async (req, res) => {
   const { user_id, category_id, title, amount, date_of_expense, note } =
     req.body;
@@ -26,6 +61,55 @@ expenseRouter.post("/", async (req, res) => {
   }
 });
 
+
+/**
+ * @swagger
+ * /expenses:
+ *   get:
+ *     summary: Get all expenses for a user
+ *     description: Retrieve all expenses for a user, with optional filters by category and date range
+ *     tags:
+ *       - Expense Management 
+ *     parameters:
+ *       - in: query
+ *         name: user_id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - in: query
+ *         name: category
+ *         required: false
+ *         schema:
+ *           type: integer
+ *       - in: query
+ *         name: startdate
+ *         required: false
+ *         schema:
+ *           type: string
+ *           format: date
+ *       - in: query
+ *         name: enddate
+ *         required: false
+ *         schema:
+ *           type: string
+ *           format: date
+ *     responses:
+ *       200:
+ *         description: Data fetched successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *       500:
+ *         description: Internal Server Error
+ */
 expenseRouter.get("/", async (req, res) => {
   const { user_id } = req.body;
   const { category, startdate, enddate } = req.query;
@@ -64,6 +148,34 @@ expenseRouter.get("/", async (req, res) => {
     .json({ message: "Fetcing data successfully", data: result.rows });
 });
 
+
+/**
+ * @swagger
+ * /expenses:
+ *   delete:
+ *     summary: Delete an expense
+ *     description: Delete an expense record by user_id and expense_id
+ *     tags:
+ *       - Expense Management 
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               user_id:
+ *                 type: integer
+ *               expense_id:
+ *                 type: integer
+ *     responses:
+ *       200:
+ *         description: Expense deleted successfully
+ *       404:
+ *         description: Expense not found
+ *       500:
+ *         description: Internal Server Error
+ */
 expenseRouter.delete("/", async (req, res) => {
   const { user_id, expense_id } = req.body;
 
@@ -81,6 +193,47 @@ expenseRouter.delete("/", async (req, res) => {
   return res.status(200).json({ message: "Deleted expense successfully" });
 });
 
+
+/**
+ * @swagger
+ * /expenses:
+ *   put:
+ *     summary: Update an expense
+ *     description: Update an existing expense record by expense_id and user_id
+ *     tags:
+ *       - Expense Management 
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               expense_id:
+ *                 type: integer
+ *               user_id:
+ *                 type: integer
+ *               category_id:
+ *                 type: integer
+ *               title:
+ *                 type: string
+ *               amount:
+ *                 type: number
+ *               date_of_expense:
+ *                 type: string
+ *                 format: date
+ *               note:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Expense updated successfully
+ *       400:
+ *         description: Missing required fields
+ *       404:
+ *         description: Expense not found
+ *       500:
+ *         description: Internal Server Error
+ */
 expenseRouter.put("/", async (req, res) => {
   const {
     expense_id,
@@ -121,6 +274,55 @@ expenseRouter.put("/", async (req, res) => {
   }
 });
 
+
+/**
+ * @swagger
+ * /expenses/report:
+ *   get:
+ *     summary: Get expense report by category
+ *     description: Get total expenses grouped by category with optional date range filter
+ *     tags:
+ *       - Expense Management 
+ *     parameters:
+ *       - in: query
+ *         name: user_id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - in: query
+ *         name: startdate
+ *         required: false
+ *         schema:
+ *           type: string
+ *           format: date
+ *       - in: query
+ *         name: enddate
+ *         required: false
+ *         schema:
+ *           type: string
+ *           format: date
+ *     responses:
+ *       200:
+ *         description: Report fetched successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       category_id:
+ *                         type: integer
+ *                       total_expense:
+ *                         type: number
+ *       500:
+ *         description: Internal Server Error
+ */
 expenseRouter.get("/report", async (req, res) => {
   const { user_id } = req.body;
   const { startdate, enddate } = req.query;
