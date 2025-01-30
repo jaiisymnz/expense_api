@@ -44,5 +44,9 @@ The **Expense Tracker API** is a RESTful API designed for managing personal expe
 - **Version Control**: Git (GitHub)
 
 ## Setup Instructions
-
+- Clone this repository
 - Postgresql query provided in file query.txt
+
+
+## API test and API doucmentation 
+- using swagger provided in http://localhost:4000/api-docs/ 

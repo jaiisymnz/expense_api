@@ -1,0 +1,79 @@
+CREATE TABLE users (
+    user_id SERIAL PRIMARY KEY,
+    firstname VARCHAR(100) NOT NULL,
+    lastname VARCHAR(100) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password TEXT NOT NULL
+);
+
+CREATE TABLE category (
+    category_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL UNIQUE
+);
+
+
+CREATE TABLE expense (
+    expense_id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    category_id INT NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    amount DECIMAL(10,2) NOT NULL,
+    date_of_expense DATE NOT NULL,
+    note TEXT,
+    CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    CONSTRAINT fk_category FOREIGN KEY (category_id) REFERENCES category(category_id) ON DELETE CASCADE
+);
+
+
+INSERT INTO category (name) VALUES
+('Food & Drinks'),
+('Transportation'),
+('Entertainment'),
+('Shopping'),
+('Health & Fitness'),
+('Bills & Utilities'),
+('Education'),
+('Travel'),
+('Savings & Investments'),
+('Others');
+
+
+INSERT INTO users (firstname, lastname, email, password) VALUES
+('Alice', 'Johnson', 'alice.johnson@example.com', 'hashed_password_1'),
+('Bob', 'Smith', 'bob.smith@example.com', 'hashed_password_2'),
+('Charlie', 'Brown', 'charlie.brown@example.com', 'hashed_password_3'),
+('David', 'Wilson', 'david.wilson@example.com', 'hashed_password_4'),
+('Emma', 'Davis', 'emma.davis@example.com', 'hashed_password_5');
+
+
+INSERT INTO expense (user_id, category_id, title, amount, date_of_expense, note) VALUES
+(1, 1, 'Lunch at restaurant', 12.50, '2025-01-28', 'Had a great meal with friends'),
+(2, 2, 'Taxi to work', 8.00, '2025-01-27', 'Morning commute'),
+(3, 3, 'Movie night', 15.00, '2025-01-26', 'Watched the latest blockbuster'),
+(4, 4, 'New sneakers', 75.00, '2025-01-25', 'Bought on sale'),
+(5, 5, 'Gym membership', 40.00, '2025-01-24', 'Monthly subscription'),
+(1, 6, 'Electricity bill', 60.00, '2025-01-23', 'January bill'),
+(2, 7, 'Online course', 120.00, '2025-01-22', 'React.js masterclass'),
+(3, 8, 'Weekend trip', 300.00, '2025-01-21', 'Trip to the mountains'),
+(4, 9, 'Stock investment', 500.00, '2025-01-20', 'Bought some Tesla shares'),
+(5, 10, 'Random expenses', 20.00, '2025-01-19', 'Miscellaneous items');
+(1, 1, 'Coffee and snacks', 5.75, '2025-01-18', 'Morning coffee run'),
+(2, 2, 'Gas refill', 45.00, '2025-01-17', 'Full tank for the week'),
+(3, 3, 'Concert ticket', 80.00, '2025-01-16', 'VIP pass to music festival'),
+(4, 4, 'Clothing shopping', 120.00, '2025-01-15', 'Winter collection sale'),
+(5, 5, 'Doctor appointment', 50.00, '2025-01-14', 'Routine checkup'),
+(1, 6, 'Internet bill', 30.00, '2025-01-13', 'Monthly payment'),
+(2, 7, 'E-book purchase', 15.00, '2025-01-12', 'Bought a new programming book'),
+(3, 8, 'Flight ticket', 250.00, '2025-01-11', 'Trip to Bali'),
+(4, 9, 'Crypto investment', 200.00, '2025-01-10', 'Bought Ethereum'),
+(5, 10, 'Gift for friend', 35.00, '2025-01-09', 'Birthday present'),
+(1, 1, 'Dinner with family', 45.00, '2025-01-08', 'Celebration dinner'),
+(2, 2, 'Monthly subway pass', 90.00, '2025-01-07', 'Unlimited rides'),
+(3, 3, 'Streaming subscription', 15.99, '2025-01-06', 'Netflix monthly payment'),
+(4, 4, 'Gadget purchase', 300.00, '2025-01-05', 'New wireless headphones'),
+(5, 5, 'Yoga class', 25.00, '2025-01-04', 'Weekend yoga session'),
+(1, 6, 'Water bill', 20.00, '2025-01-03', 'Utility payment'),
+(2, 7, 'Coding bootcamp fee', 500.00, '2025-01-02', 'Enrolled in a new course'),
+(3, 8, 'Hotel booking', 150.00, '2025-01-01', 'Weekend getaway'),
+(4, 9, 'Stock purchase', 1000.00, '2024-12-31', 'Invested in Apple stocks'),
+(5, 10, 'Stationery', 10.00, '2024-12-30', 'New notebook and pens');
